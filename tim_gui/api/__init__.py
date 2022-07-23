@@ -1,7 +1,5 @@
 from dataclasses import dataclass, field
-from decimal import Decimal
-from queue import Queue
-from typing import Any, Callable, Optional, Type, Union
+from typing import Any, Callable, Optional
 
 import requests
 from pydantic import BaseModel, parse_obj_as
@@ -118,7 +116,9 @@ class TimAPI(RequestResult):
         return Item(**data)
 
     def delete_item(self, id: int) -> Item:
-        data = self.request.request("DELETE", f"/items/delete/{id}")
+        data = self.request.request("DELETE", f"/items/delete/{id}",
+                                    headers={"Authorization": f"{self.token_type.capitalize()} {self.access_token}"},
+                                    )
         return Item(**data)
 
     def withdraw_item(self, id: int, quantity: int) -> Item:
