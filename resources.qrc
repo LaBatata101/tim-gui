@@ -1,0 +1,12 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="icons">
+        <file alias="broken-image32x32.png">broken-image32x32.png</file>
+        <file alias="close32x32.png">close32x32.png</file>
+        <file alias="eye_closed32x32.png">eye_closed32x32.png</file>
+        <file alias="eye_open32x32.png">eye_open32x32.png</file>
+        <file alias="plus32x32.png">plus32x32.png</file>
+        <file alias="tick32x32.png">tick32x32.png</file>
+        <file alias="trash32x32.png">trash32x32.png</file>
+    </qresource>
+</RCC>
