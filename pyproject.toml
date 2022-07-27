@@ -14,7 +14,6 @@ pydantic = "^1.9.0"
 pytest = "^5.2"
 
 [tool.poetry.scripts]
-tim = "tim_gui.main:main"
 gui = "tim_gui.gui:run"
 
 [build-system]
