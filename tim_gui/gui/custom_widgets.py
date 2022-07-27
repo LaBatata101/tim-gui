@@ -5,10 +5,39 @@ from PySide6.QtWidgets import (QHBoxLayout, QLabel, QLayoutItem, QLineEdit,
                                QPushButton, QScrollArea, QSpacerItem,
                                QVBoxLayout, QWidget)
 
-from tim_gui.api.models import Item, ItemUpdate, User, UserUpdate
-from tim_gui.gui.utils import create_widgets_with_layout
+from tim_gui.api.models import Item, User, UserUpdate
+from tim_gui.gui.utils import center_window, create_widgets_with_layout
 
 icons_path = Path(__file__).parent.parent.parent / "icons"
+
+
+class PreviewImage(QLabel):
+    def __init__(self):
+        super().__init__()
+
+        self.preview_window = QWidget()
+        self.preview_window.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
+
+        self.preview_lbl = QLabel()
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(self.preview_lbl)
+
+        self.preview_window.setLayout(layout)
+
+        center_window(self.preview_window)
+
+    def enterEvent(self, event: QtGui.QEnterEvent):
+        preview_image = self.pixmap().scaled(256, 256, mode=QtCore.Qt.SmoothTransformation)
+
+        self.preview_lbl.setPixmap(preview_image)
+        self.preview_window.show()
+
+        return super().enterEvent(event)
+
+    def leaveEvent(self, event: QtCore.QEvent):
+        self.preview_window.close()
+        return super().leaveEvent(event)
 
 
 class ItemView(QWidget):
@@ -28,12 +57,10 @@ class ItemView(QWidget):
         name_layout = create_widgets_with_layout(QVBoxLayout, QLabel("<b>Name:<\b>"), self.name_lbl)
         bar_code_layout = create_widgets_with_layout(QVBoxLayout, QLabel("<b>Bar Code:<\b>"), self.barcode_lbl)
         price_layout = create_widgets_with_layout(QVBoxLayout, QLabel("<b>Price:<\b>"), self.price_lbl)
-        quantity_layout = create_widgets_with_layout(
-            QVBoxLayout, QLabel("<b>Quantity:<\b>"), self.quantity_lbl
-        )
+        quantity_layout = create_widgets_with_layout(QVBoxLayout, QLabel("<b>Quantity:<\b>"), self.quantity_lbl)
 
         image_path = f"{icons_path}/broken-image32x32.png" if item.image_path is None else item.image_path
-        self.image_lbl = QLabel()
+        self.image_lbl = PreviewImage()
         self.set_image(image_path)
 
         container_layout = create_widgets_with_layout(QHBoxLayout, self.image_lbl)
@@ -85,7 +112,6 @@ class ItemView(QWidget):
 
         if item.image_path is not None:
             self.set_image(item.image_path)
-
 
 
 class ListView(QWidget):
