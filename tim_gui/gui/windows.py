@@ -503,7 +503,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self._api = api
-        self.items_list = ItemsList(api.items())  # TODO: update items list when item is edited
+        self.items_list = ItemsList(api.items())
         self.items_list.reachedEnd.connect(self.__fetch_more_data)
         self.searchbar = QLineEdit()
         self.searchbar.setPlaceholderText("Search...")
